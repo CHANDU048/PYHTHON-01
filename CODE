@@ -1,0 +1,87 @@
+import pandas as pd
+import numpy as np
+from matplotlib import pyplot as plt
+%matplotlib inline
+import seaborn as sns
+import warnings
+warnings.filterwarnings("ignore")
+
+mport sqlite3
+from sqlite3 import Error
+from IPython.display import display, HTML
+import pandas as pd
+
+def create_connection(db_file, delete_db=False):
+    import os
+    if delete_db and os.path.exists(db_file):
+        os.remove(db_file)
+
+    conn = None
+    try:
+        conn = sqlite3.connect(db_file)
+        conn.execute("PRAGMA foreign_keys = 1")
+    except Error as e:
+        print(e)
+    return conn
+
+def create_table(sql,conn):
+    c = conn.cursor()
+    c.execute(sql)
+    print("table successfully created")
+
+def execute(sql,conn):
+    rows = conn.cursor().execute(sql).fetchall()
+    return rows
+
+
+conn=create_connection("health.db")
+
+with open("health.csv") as lines:
+  
+    lines=list(lines)
+    data1=[]
+    data_pgb=[]
+    data_sibd=[]
+    data_ao=[]
+    lines[0]=lines[0].split(',')
+    lines[0][-1]=lines[0][-1].strip('\n')
+    colnames=lines[0]
+    k=1
+    for i in lines[1:]:
+        i=i.split(',')
+        i[-1]=i[-1].strip('\n')
+        name="Patient_"+str(k)
+        val=(name,*i)
+        #print(val[-2])
+        data1.append(val)
+        data_pgb.append(val[:4])
+        data_sibd.append(val[0:1]+val[4:-2])
+        data_ao.append(val[0:1]+val[-2:])
+        k+=1
+try:
+    create_table("create table health_care(Patient_Name text primary key,Pregnancies integer not null,Glucose integer not null,BloodPressure integer not null,SkinThickness integer not null, Insulin integer not null, BMI real,DiabetesPedigreeFunction real,Age integer, Outcome integer) ",conn)
+except:
+    pass
+  
+try:
+    conn.cursor().executemany("insert into health_care values(?,?,?,?,?,?,?,?,?,?)",data1)
+    conn.commit()
+except:
+    pass
+
+df = pd.read_sql_query("""SELECT * FROM health_care limit 10""", conn)
+display(df)
+data['BloodPressure'].replace(0,69.10,inplace = True)
+data['SkinThickness'].replace(0,20.53,inplace = True)
+data['Insulin'].replace(0,79.79,inplace = True)
+data['BMI'].replace(0,31.99,inplace = True
+svm_model = SVC(probability=True)
+svm_model.fit(x_train,y_train)
+y_pred_svm =  svm_model.predict(x_test)
+y_pred_svm
+sns_G_I = sns.scatterplot(x=Glucose,y=Insulin,hue= 'Outcome',data = data
+sns_P_Age = sns.scatterplot(x=data['BMI'],y=data['Age'],hue = 'Outcome',data = data)
+svm_model = SVC(probability=True)
+svm_model.fit(x_train,y_train)
+y_pred_svm =  svm_model.predict(x_test)
+y_pred_svm
